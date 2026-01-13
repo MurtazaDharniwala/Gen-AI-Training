@@ -30,11 +30,12 @@ async def ask_question(req: QueryRequest = Body(...)):
         api_key=api_key,
     )
     start = time.time()
+    systemPrompt = "You're a Production Support AI assistant. Answer the question as best as you can. If you don't know the answer, just say that you don't know. Do not make up an answer. Keep the answer in JSON format having severity, issue_type, recommended_action as keys."
     try:
         completion = client.chat.completions.create(
             model="openai/gpt-oss-20b:groq",
             messages=[
-                {"role": "system", "content": "response should be in Json format which can be parse by python json.loads"},
+                {"role": "system", "content": systemPrompt},
                 {"role": "user", "content": req.question}
                 ],
         )
